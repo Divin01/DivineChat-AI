@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dvina-AI, Personal Assistant</title>
+    <link rel="stylesheet" href="../src/stylesheet/chatbot.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> 
+
+</head>
+<body>
+    <div class="main-container">
+        <div class="chat-bot container">
+            <!-- Sidebar Navigation -->
+            <div class="sideNavigation">
+                <div class="topBarAction" id="toggleSidebar">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+    
+                <div class="sideNavButton">
+                    <button id="newChatButton" class="transparentButton">
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="collapseText">New Chat</span>
+                    </button>
+                </div>
+    
+                <div class="chatHistory">
+                    <h5>Recent Conversations</h5>
+                    <ul class="recentchat">
+                        <!-- Recent chats will be populated dynamically from the backend-->
+                    </ul>
+                </div>
+    
+                <div class="actionList">
+                    <button class="transparentButton" id="feebackChatbot">
+                        <i class="fa-regular fa-circle-question"></i>
+                        <span class="collapseText">Help & FAQ</span>
+                    </button>
+    
+                    <button class="transparentButton" style="display: none;">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span class="collapseText">History</span>
+                    </button>
+    
+                    <button class="transparentButton" id="themeToggle" title="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                        <span class="collapseText">Theme</span>
+                    </button>
+    
+                    <button class="transparentButton">
+                        <i class="fa-solid fa-gear"></i>
+                        <span class="collapseText">Settings</span>
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Main Chat Screen -->
+            <div class="chatScreen"> 
+                <div class="chatHeader">
+                    <div class="chatTitle">Divina-AI, Personal Assistant</div>
+                    <div class="chatTools">
+                        <button id="mobileMenuToggle" class="sidebar-toggle">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                        <button>
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                    </div>
+                </div>
+    
+                <div class="startContent">
+                    <h1>
+                        <span class="greeting">Hello,</span><br>
+                        <span class="brand">How can I help you today?</span>
+                    </h1>
+                    <p>Ask me anything or try one of these suggestions:</p>
+                    
+                    <div class="suggestionGrid">
+                        <div class="suggestionCard">
+                            <h3>How to be Productive</h3>
+                            <p>Learn the best techniques for optimal lifestyle</p>
+                        </div>
+                        <div class="suggestionCard">
+                            <h3>Healthy meal plans</h3>
+                            <p>Get personalized nutrition advice and recipes</p>
+                        </div>
+                        <div class="suggestionCard">
+                            <h3>How to start a new business successfully</h3>
+                            <p>Get assistance with raw ideas for your dream business</p>
+                        </div>
+                        <div class="suggestionCard">
+                            <h3>Travel recommendations</h3>
+                            <p>Discover the best places to visit for your next trip</p>
+                        </div>
+                    </div>
+                </div> 
+    
+                <div class="chatContent">
+                    <div class="results">
+                        <!-- Chat messages will be populated dynamically from the server-->
+                    </div>
+                </div>
+    
+                <!-- File Preview Container -->
+                <div class="file-preview-container" style="display: none;">
+                    <div class="preview-header">
+                        <span>Selected File</span>
+                        <button id="remove-file">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="preview-content">
+                        <img id="image-preview" src="" alt="Preview" style="display: none;">
+                        <div class="file-info">
+                            <span id="file-name"></span>
+                            <span id="file-size"></span>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Input area -->
+                <div class="inputContainer">
+                    <div class="inputArea">
+                        <textarea id="user-input" placeholder="Type your message here..." rows="1"></textarea>
+                        <div class="inputTools">
+                            <button title="Attach file" id="fileInput"><i class="fa-solid fa-paperclip"></i></button>
+                            <button title="Send voice message" id="voiceInput"><i class="fa-solid fa-microphone"></i></button>
+                            <button class="sendButton" id="sendButton">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="privacyPolicy">
+                        Divina may not always be accurate. Please verify the information 
+                        before making any decisions based on it.<br>
+                        <span>Powered by Gemini-Flask</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dark Mode Toggle Script -->
+    <script>
+        // Dark mode toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // Check for saved theme preference or default to light mode
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        // Toggle theme
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Mobile sidebar toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.querySelector('.sideNavigation');
+        const sidebarToggle = document.getElementById('toggleSidebar');
+        
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 767 && 
+                !sidebar.contains(e.target) && 
+                !mobileMenuToggle.contains(e.target) && 
+                !sidebarToggle.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+    <script src="../src/script/chatbot.js"></script>
+</body>
+</html>
