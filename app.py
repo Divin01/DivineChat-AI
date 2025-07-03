@@ -13,6 +13,12 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
+from flask import send_from_directory
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('.', 'index.html')
+
 # Gemini configuration
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
 model = genai.GenerativeModel(
