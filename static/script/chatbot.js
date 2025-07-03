@@ -602,7 +602,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('conversation_id', currentConversationId || '');
         formData.append('history', JSON.stringify(conversations));
 
-        const response = await fetch('http://127.0.0.1:5000/api/DivineChat-AI', {
+        const response = await fetch('/api/DivineChat-AI', {
             method: 'POST',
             body: formData
         });
