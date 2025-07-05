@@ -1,6 +1,6 @@
-# 🧠 Divina – Your Personal AI Assistant
+# 🧠 DivinaChat – Your Personal AI Assistant
 
-**Divina** is a smart, file-aware AI chatbot powered by **Google's Gemini AI** and built with **Flask** and a responsive **JavaScript frontend**. Created with care by **Divine Mathem's**, Divina can understand PDFs, images, voice input, and provides friendly, professional responses.
+**DivinaChat** is a smart, file-aware AI chatbot powered by **Google's Gemini AI** and built with **Flask** and a responsive **JavaScript frontend**. Created with care by **Divine Mathem's**, DivinaChat can understand PDFs, images, voice input, and provides friendly, professional responses.
 
 ---
 

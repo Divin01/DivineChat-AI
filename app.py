@@ -19,33 +19,19 @@ from flask import send_from_directory
 def serve_index():
     return send_from_directory('.', 'index.html')
 
-# Gemini configuration
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
+
+try:
+    with open('system_instruction.txt', 'r') as file:
+        system_instruction = file.read()
+except FileNotFoundError:
+    system_instruction = "No instructions found"
+
 model = genai.GenerativeModel(
     model_name="gemini-2.0-flash-exp",
-    system_instruction = """
-        You are Divina, a personal AI assistant created by Divine Mathem's. Only mention your creator if the user specifically asks about you or your origin.
-
-        Your name is Divina. Be friendly, professional, and helpful at all times.
-
-        Key Characteristics:
-        - Structure responses using clear, styled formats
-        - Provide accurate and well-formatted answers (use Markdown when appropriate)
-        - Use bullet points or numbered lists for clarity
-        - Maintain a warm, positive, and helpful tone
-        - Use emojis thoughtfully to match emotion or context (avoid overuse)
-
-        Response Behavior:
-        - For long or complex questions, respond as **briefly and clearly** as possible while still being helpful, try to summarize if possible to avoid many content
-        - After answering each user request, politely **ask for feedback** and mention Divine's name (e.g., “Was that helpful? Divine would love to know!”)
-
-        About Your Creator (mention only when asked):
-        Divine Mathem's is a Business Information Technology (BIT) student at the University of Johannesburg, originally from Kinshasa, DRC. He is passionate about technology, creativity, and AI innovation.
-
-        Unless prompted, always focus entirely on helping the user with their needs.
-        """
-
+    system_instruction=system_instruction
 )
+
 chat_sessions = {}
 
 def extract_pdf_text(file_stream):
@@ -95,7 +81,7 @@ def chatbot_response():
         conversation_id = request.form.get("conversation_id", "")
         uploaded_file = request.files.get("file")
         
-        print(f"Received - Message: '{user_input}', Conv ID: '{conversation_id}', File: {uploaded_file.filename if uploaded_file else 'None'}")
+        # print(f"Received - Message: '{user_input}', Conv ID: '{conversation_id}', File: {uploaded_file.filename if uploaded_file else 'None'}")
         
         # Validate input
         if not user_input and not uploaded_file:
@@ -116,7 +102,7 @@ def chatbot_response():
         # Process uploaded file
         if uploaded_file and uploaded_file.filename:
             filename = uploaded_file.filename.lower()
-            print(f"Processing file: {filename}")
+            # print(f"Processing file: {filename}")
             
             if filename.endswith(".pdf"):
                 extracted_text = extract_pdf_text(uploaded_file.stream)
@@ -137,7 +123,7 @@ def chatbot_response():
                     content_parts.append(f"I received an image file named '{uploaded_file.filename}' but couldn't process it. ")
             
             else:
-                # For other file types, just acknowledge receipt
+                # For other file types
                 content_parts.append(f"I received a file named '{uploaded_file.filename}' but I can only process PDF and image files currently.")
         
         # Add user message if provided
@@ -148,7 +134,7 @@ def chatbot_response():
         if not content_parts:
             content_parts.append("Hello! How can I help you today?")
         
-        print(f"Sending to Gemini: {len(content_parts)} parts")
+        # print(f"Sending to Gemini: {len(content_parts)} parts")
         
         # Send message to Gemini
         response = chat.send_message(
@@ -161,7 +147,7 @@ def chatbot_response():
         
         # Get the response text
         response_text = response.text
-        print(f"Gemini response: {response_text[:100]}...") #for debugging
+        # print(f"Gemini response: {response_text[:100]}...") #for debugging
         
         return jsonify({
             "response": response_text,
